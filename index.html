@@ -1,12 +1,14 @@
+Nn, [01.11.2025 11:24]
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SNKR Store</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="#">SNKR</a>
@@ -15,6 +17,9 @@
       <a href="#about">О нас</a>
       <a href="#contact">Контакты</a>
     </nav>
+    <div class="cart">
+      🛒 <span id="cart-count">0</span>
+    </div>
   </div>
 </header>
 
@@ -29,40 +34,40 @@
         <a class="btn" href="#shop">Смотреть коллекцию</a>
       </div>
 
-      <!-- ЗАМЕНИТЬ КАРТИНКУ: главная -->
+      <!-- ЗАМЕНИТЬ ЭТО ФОТО -->
       <div class="hero-media">
-        <img src="photki/photo_2025-11-01_10-26-48.jpg" alt="Sneaker hero image"> 
+        <img src="photki/photo_2025-11-01_10-26-48.jpg" alt="Sneaker hero image">
       </div>
     </div>
   </section>
 
-  <!-- SHOP GRID -->
+  <!-- SHOP -->
   <section id="shop" class="shop container">
     <h2>Коллекция</h2>
     <div class="grid">
 
       <figure class="card">
-        
-        <img src="./photki/allwhites-e1599661784895.jpg"Sneaker 1"> 
+        <img src="./photki/allwhites-e1599661784895.jpg" alt="Sneaker 1">
         <figcaption>Classic White — 12 990 ₽</figcaption>
+        <button class="add-to-cart" data-name="Classic White" data-price="12990">Добавить в корзину</button>
       </figure>
 
       <figure class="card">
-        
         <img src="./photki/airforce.jpeg" alt="Sneaker 2">
         <figcaption>Deep Black — 13 990 ₽</figcaption>
+        <button class="add-to-cart" data-name="Deep Black" data-price="13990">Добавить в корзину</button>
       </figure>
 
       <figure class="card">
-        
-        <img class="jordan" src="./photki/_2025-03-12_144801611-1000x600.png"Sneaker 3">
-        <figcaption>Contrast Edition — 14 490 ₽</figcaption>
+        <img class="jordan" src="./photki/_2025-03-12_144801611-1000x600.png" alt="Sneaker 3">
+        <figcaption>New Black — 14 490 ₽</figcaption>
+        <button class="add-to-cart" data-name="New Black" data-price="14490">Добавить в корзину</button>
       </figure>
 
       <figure class="card">
-        <!-- ЗАМЕНИТЬ КАРТИНКУ -->
-        <img src="./photki/adidas.jpeg"Sneaker 4">
-        <figcaption>Urban Grey — 11 990 ₽</figcaption>
+        <img src="./photki/adidas.jpeg" alt="Sneaker 4">
+        <figcaption>Colorful City — 11 990 ₽</figcaption>
+        <button class="add-to-cart" data-name="Colorful City" data-price="11990">Добавить в корзину</button>
       </figure>
 
     </div>
@@ -71,7 +76,7 @@
   <!-- ABOUT -->
   <section id="about" class="about container">
     <h2>О нас</h2>
-    <p>Мы создаём кроссовки с акцентом на простоту, комфорт и эстетику.  
+    <p>Мы продаем кроссовки с акцентом на простоту, комфорт и эстетику.  
        Без лишних деталей — только стиль и качество.</p>
   </section>
 
@@ -96,12 +101,62 @@
   </div>
 </footer>
 
+<!-- Выпадающая корзина -->
+<div class="cart-dropdown" id="cart-dropdown"></div>
+
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-  document.querySelectorAll('.card img').forEach(img=>{
-    img.style.cursor = 'zoom-in';
-    img.addEventListener('click', ()=> window.open(img.src, '_blank'));
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cartCount = document.getElementById("cart-count");
+const cartDropdown = document.getElementById("cart-dropdown");
+
+function updateCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  cartCount.textContent = cart.length;
+  renderCart();
+}
+
+function renderCart() {
+  cartDropdown.innerHTML = "";
+  if (cart.length === 0) {
+    cartDropdown.innerHTML = "<p>Корзина пустая</p>";
+    return;
+  }
+
+  let total = 0;
+  cart.forEach(item => {
+    total += +item.price;
+    cartDropdown.innerHTML += `
+      <div class="cart-item">
+        ${item.name} — ${item.price} ₽
+      </div>`;
   });
+
+  cartDropdown.innerHTML += `
+    <div class="cart-total">Итого: ${total} ₽</div>
+  `;
+}
+
+document.querySelectorAll(".add-to-cart").
+
+
+forEach(btn => {
+  btn.addEventListener("click", () => {
+    cart.push({ name: btn.dataset.name, price: btn.dataset.price });
+    updateCart();
+  });
+});
+
+document.querySelector(".cart").addEventListener("click", () => {
+  cartDropdown.style.display = cartDropdown.style.display === "block" ? "none" : "block";
+});
+
+updateCart();
+
+document.getElementById("year").textContent = new Date().getFullYear();
+document.querySelectorAll(".card img").forEach(img=>{
+  img.style.cursor = 'zoom-in';
+  img.addEventListener('click', ()=> window.open(img.src, '_blank'));
+});
 </script>
 
 </body>
