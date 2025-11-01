@@ -86,7 +86,7 @@ body{
 }
 .card img{
   width:100%;
-  height:320px;
+  height: 230px
   object-fit:cover;
   border-radius:var(--radius);
   border:1px solid #eee;
@@ -126,9 +126,12 @@ body{
   font-size:.9rem;
 }
 
+
+
 /* adaptive */
 @media(max-width:900px){
   .grid{grid-template-columns:1fr}
   .hero-inner{flex-direction:column-reverse}
   .hero-text h1{font-size:1.6rem}
 }
+
